@@ -1,24 +1,34 @@
-#require './path-to/app_class.rb'
+require './example_app.rb'
 class CommandExecutor
   attr_reader :obj
   def initialize(obj)
-    @obj = obj.new
+    @obj = obj
   end
   def perform(command, *params)
     case command
     when /\Amenu\z/i
-      obj.menu
+      display_menu
     #.....
     #when other command
+      #EXAMPLE
+    when /\Ahello_world\z/i
+      puts obj.hello_world
+    when /\Agreeting\z/
+      puts obj.greeting params[0]
+      #THAT YOU CAN CUT
     #execute command
     #.....
     else
       exit
     end
   end
+  def display_menu
+    puts 'Commands'.center(54)
+    puts obj.menu
+  end
 end
 
-ce = CommandExecutor.new(AppClass)
+ce = CommandExecutor.new(ExampleApp.new(['menu','hello_world', 'greeting [name]']))
 #FILE MODE
 if !!ARGV[0]
   file_name = ARGV[0]
@@ -29,7 +39,7 @@ if !!ARGV[0]
   end
 else
 #INTERACTIVE MODE
-  ce.menu
+  ce.display_menu
   puts '_'*54
   loop do
     input            = gets.chomp
